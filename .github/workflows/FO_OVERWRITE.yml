@@ -1,0 +1,18 @@
+#include "FF.au3"
+#include <FileConstants.au3>
+
+; trying to connect to a running FireFox with MozRepl on
+If _FFConnect(Default, Default, 3000) Then
+    _FFOpenURL('http://wolnelektury.pl/')
+    Local $sHTML = _FFReadHTML("html")
+    Local $sFile = @ScriptDir & '\ZRODLO.html'
+    FileDelete($sFile)
+    Local $hFile = FileOpen($sFile, $FO_OVERWRITE + $FO_UTF8)
+    FileWrite($hFile, $sHTML)
+    FileClose($hFile)
+
+    Sleep(3000)
+    If _FFDisConnect() Then MsgBox(64, "", "Disconnected from FireFox!")
+Else
+    MsgBox(64, "", "Can't connect to FireFox!")
+EndIf
